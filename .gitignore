@@ -47,6 +47,9 @@ logs/
 test-output/
 allure-results/
 allure-report/
+.allure/
+target/allure-results/
+target/site/allure-maven-plugin/
 
 # Local configuration (contains sensitive data)
 **/application-local.properties

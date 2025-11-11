@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("Sanity")
-@Tag("CRUDOperations")
+@Tag("CRUD Operations")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserSanityTests extends BaseTest {
 

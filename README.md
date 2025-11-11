@@ -69,7 +69,17 @@ rest-assured-springboot/
 - Spring Boot 3.1.5 (dependency management)
 - REST Assured 5.3.2 (API testing)
 - JUnit 5 (testing framework)
+- Allure Reports (test reporting)
 - Lombok (code generation)
 - Jackson (JSON handling)
 
+## Test Reports
 
+Generate Allure reports locally:
+
+```
+mvn clean test
+mvn allure:serve
+```
+
+View allure reports on GitHub Pages: https://HarshalaWagh.github.io/APIProject/allure-report/
