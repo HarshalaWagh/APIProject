@@ -18,12 +18,12 @@ jobs:
     - name: Verify GOREST_TOKEN secret
       run: |
         if [ -z "$GOREST_TOKEN" ]; then
-          echo "❌ ERROR: GOREST_TOKEN is not set!"
+          echo "ERROR: GOREST_TOKEN is not set!"
           echo "Please add GOREST_TOKEN to GitHub repository secrets"
           echo "Go to: Settings → Secrets → Actions → New repository secret"
           exit 1
         else
-          echo "✅ GOREST_TOKEN is set (length: ${#GOREST_TOKEN} characters)"
+          echo "GOREST_TOKEN is set (length: ${#GOREST_TOKEN} characters)"
         fi
       env:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}

@@ -13,19 +13,19 @@ import static constants.UserFieldConstants.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    
+
     @JsonProperty(ID)
     private Integer id;
-    
+
     @JsonProperty(NAME)
     private String name;
-    
+
     @JsonProperty(EMAIL)
     private String email;
-    
+
     @JsonProperty(GENDER)
     private String gender;
-    
+
     @JsonProperty(STATUS)
     private String status;
 }

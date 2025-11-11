@@ -16,60 +16,38 @@ import java.util.Random;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BaseTest {
-    
+
     private static final Random random = new Random();
     protected RequestSpecification requestSpec;
     protected Integer createdUserId;
 
     @BeforeAll
     public void setup() {
-        // Priority 1: Try environment variable (for GitHub Actions)
-        String token = System.getenv("GOREST_TOKEN");
-        
-        // Priority 2: Load from properties file (for local)
-        if (token == null || token.isEmpty() || token.equals("null")) {
-            Properties props = new Properties();
-            
-            // Try local properties first
-            try (InputStream localInput = getClass().getClassLoader().getResourceAsStream("application-local.properties")) {
-                if (localInput != null) {
-                    props.load(localInput);
-                    token = props.getProperty("api.auth.token");
-                }
-            } catch (IOException e) {
-                // Local properties not found, try main properties
-            }
-            
-            // If still no token, try main properties
-            if (token == null || token.isEmpty()) {
-                try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-                    if (input != null) {
-                        props.load(input);
-                        token = props.getProperty("api.auth.token");
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to load properties", e);
-                }
-            }
-        }
-        
-        // Debug: Print token status (first 10 chars only for security)
-        if (token != null && token.length() > 10) {
-            System.out.println("✅ Token loaded: " + token.substring(0, 10) + "...");
-        } else {
-            System.out.println("⚠️ Token not loaded properly: " + token);
-        }
-        
-        // Load other properties
         Properties props = new Properties();
+        
+        // Load application.properties
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             props.load(input);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load application.properties", e);
         }
         
+        // Load application-local.properties if exists (overrides main properties)
+        try (InputStream localInput = getClass().getClassLoader().getResourceAsStream("application-local.properties")) {
+            if (localInput != null) {
+                props.load(localInput);
+            }
+        } catch (IOException e) {
+            System.out.println("Local properties file not found, using default configuration");
+        }
+        
+        // Get configuration (environment variable takes priority)
         String baseUrl = props.getProperty("api.base.url");
         String apiVersion = props.getProperty("api.version");
+        String token = System.getenv("GOREST_TOKEN");
+        if (token == null || token.isEmpty()) {
+            token = props.getProperty("api.auth.token");
+        }
         
         // Create RequestSpecification
         requestSpec = new RequestSpecBuilder()
@@ -85,7 +63,7 @@ public class BaseTest {
     protected RequestSpecification getRequestSpec() {
         return RestAssured.given().spec(requestSpec);
     }
-    
+
     // Generate unique email to avoid conflicts
     protected String generateUniqueEmail() {
         return "testuser" + System.currentTimeMillis() + random.nextInt(1000) + "@example.com";
