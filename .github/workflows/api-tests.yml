@@ -39,26 +39,18 @@ jobs:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: mvn clean test
       
-    - name: Load test report history
-      uses: actions/checkout@v4
+    - name: Upload Allure Results
       if: always()
-      continue-on-error: true
+      uses: actions/upload-artifact@v4
       with:
-        ref: gh-pages
-        path: gh-pages
+        name: allure-results
+        path: target/allure-results/
+        retention-days: 30
         
-    - name: Build Allure Report
-      uses: simple-elf/allure-report-action@v1.7
+    - name: Upload Surefire Reports
       if: always()
+      uses: actions/upload-artifact@v4
       with:
-        allure_results: target/allure-results
-        allure_history: allure-history
-        keep_reports: 20
-        
-    - name: Deploy Allure Report to GitHub Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-history
+        name: test-reports
+        path: target/surefire-reports/
+        retention-days: 30

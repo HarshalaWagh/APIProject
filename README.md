@@ -82,4 +82,8 @@ mvn clean test
 mvn allure:serve
 ```
 
-View allure reports on GitHub Pages: https://HarshalaWagh.github.io/APIProject/allure-report/
+View reports on GitHub:
+- Go to Actions tab
+- Click on workflow run
+- Download "allure-results" artifact
+- Run: `mvn allure:serve` locally with downloaded results
